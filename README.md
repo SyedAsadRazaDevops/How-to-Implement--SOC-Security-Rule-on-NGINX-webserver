@@ -106,5 +106,7 @@ add_header Clear-Site-Data "cookies";
 
 ** LINK **=
 > https://geekflare.com/http-header-implementation/
+
 > https://geekflare.com/nginx-webserver-security-hardening-guide/
+
 ![image](https://user-images.githubusercontent.com/71556060/199497858-12ae079d-bb4b-434e-b52d-0b9e8fa2fecf.png)
