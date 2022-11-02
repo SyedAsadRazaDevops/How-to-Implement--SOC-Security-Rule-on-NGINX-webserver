@@ -1,0 +1,62 @@
+server {
+
+#### define_server_HTTP/HTTPS_mode
+	#listen 80;
+	#listen [::]:80;
+	 listen 443 ssl default_server;
+	 listen [::]:443 ssl default_server;
+	
+	
+#### define_GENRAL_INFO_for_server_files
+    server_name example.com 18.20.22.24;
+    root /var/www/html/project/public;
+    index index.php;
+
+    charset utf-8;
+
+
+#### define_NGINX_limit_in_server
+    location / {
+                try_files $uri $uri/ /index.php?$query_string;
+	              proxy_read_timeout 1800;
+	              proxy_connect_timeout 1800;
+	              proxy_send_timeout 1800;
+	              send_timeout 1800;
+	              client_max_body_size 8048M;
+    }
+
+#### define_ERROR_page_by_default
+    error_page 404 /index.php;
+
+
+#### Redirect all http to https
+    location / {
+        return 301 https://example.com$request_uri;
+    }
+
+
+#### define_PHP_limit_in_server
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_read_timeout 600;
+        fastcgi_buffers 256 128k;
+        fastcgi_connect_timeout 300s;
+        fastcgi_send_timeout 300s;
+        client_max_body_size 50000M;
+    }
+
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+
+#### Block-HT(access-file)_apache_file_in_server 
+     location ~ /\.ht {
+	deny all;
+    }
+
+
+}
