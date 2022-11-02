@@ -1,0 +1,14 @@
+server {
+        root /home/iocdev/public_html/build;
+        index index.html index.htm index.php index.nginx-debian.html;
+        server_name dev-ioc.kakashi.app;
+
+location / {
+              try_files $uri $uri/ /index.html;
+              proxy_read_timeout 1800;
+              proxy_connect_timeout 1800;
+              proxy_send_timeout 1800;
+              send_timeout 1800;
+              client_max_body_size 8048M;
+    }
+}
