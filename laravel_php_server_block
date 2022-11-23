@@ -6,8 +6,8 @@ server {
   listen [::]:443;  
   
   
-  server_name v2-nhcc.kakashi.app;
-  root /home/nhcc-backend/public_html/ticketing-system/public;
+  server_name my.domain.com;
+  root /home/project/public_html/laravel-app/public;
   index index.php; 
     
   charset utf-8;
