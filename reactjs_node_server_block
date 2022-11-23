@@ -1,14 +1,51 @@
 server {
-        root /home/iocdev/public_html/build;
-        index index.html index.htm index.php index.nginx-debian.html;
-        server_name dev-ioc.kakashi.app;
 
-location / {
-              try_files $uri $uri/ /index.html;
-              proxy_read_timeout 1800;
-              proxy_connect_timeout 1800;
-              proxy_send_timeout 1800;
-              send_timeout 1800;
-              client_max_body_size 8048M;
-    }
+ #ONLY_HTTPS_ALLOWED
+ #      listen 80;
+ #      listen [::]:80;
+        listen [::]:443 ssl; 
+        listen 443 ssl;        
+        
+        root /home/nhcc-frontend/public_html/react-ticketing-system/build;
+        index index.html index.htm index.nginx-debian.html;
+        server_name my.domain.com;
+
+ #REMOVE_UNKNOWN_ERROR_FILES      
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+
+ #CLICK_JACKING_ATTACK_PROTECTION
+ #      add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header Content-Security-Policy "default-src 'self';";
+        add_header X-Frame-Options "DENY";
+        add_header X-Permitted-Cross-Domain-Policies master-only;
+ #      add_header Referrer-Policy same-origin;
+        add_header Referrer-Policy no-referrer;
+        add_header Permissions-Policy "geolocation 'none'; camera 'none'; speaker 'none';";
+        add_header Clear-Site-Data "cookies";
+
+ #DISABLE_UNWANTED_HTTP_METHODS
+        if ($request_method !~ ^(GET|HEAD|POST)$ ) 
+                {
+        return 405; 
+                }
+ 
+ #REDIRECT_REQUEST_HTTP_TO_HTTPS
+        if ($http_x_forwarded_proto = "http") {
+            return 301 https://<my.domain.com>$request_uri;
+                }  
+ 
+ 
+        location / {
+            try_files $uri /index.html;
+            proxy_read_timeout 1800;
+            proxy_connect_timeout 1800;
+            proxy_send_timeout 1800;
+            send_timeout 1800;
+            client_max_body_size 8048M;
+                } 
+
 }
+
